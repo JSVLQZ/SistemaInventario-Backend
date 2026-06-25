@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Sistema.Inventario.Services/Sistema.Inventario.Services.csproj" Id="f06307b4-065b-467b-b192-09b87b8c200f" />
+  <Project Path="SistemaInventario.API/SistemaInventario.API.csproj" Id="bc7518c3-b7c0-459d-a0c4-951fa230abe8" />
+  <Project Path="SistemaInventario.Data/SistemaInventario.Data.csproj" Id="39af3f9d-8173-4b23-b289-9819409e816a" />
+</Solution>
