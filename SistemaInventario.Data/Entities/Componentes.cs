@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -7,6 +8,7 @@ namespace SistemaInventario.Data.Entities
 {
     public class Componentes
     {
+        [Key]
         [Column("componentes_id")]
         public int ComponentesId { get; set; }
 
@@ -22,7 +24,7 @@ namespace SistemaInventario.Data.Entities
         [Column("serial_componente")]
         public string SerialComponente { get; set; } = string.Empty;
 
-        [ForeignKey("equipo_id")]
+        [ForeignKey("EquipoId")]
         public Equipos? Equipos { get; set; }
     }
 }

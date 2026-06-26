@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -7,6 +8,7 @@ namespace SistemaInventario.Data.Entities
 {
     public class Perifericos
     {
+        [Key]
         [Column("periferico_id")]
         public int PerifericoId { get; set; }
 
@@ -25,7 +27,7 @@ namespace SistemaInventario.Data.Entities
         [Column("user_id")]
         public int? UserId { get; set; }
 
-        [ForeignKey("user_id")]
+        [ForeignKey("UserId")]
         public Usuario? Usuario { get; set; }
     }
 }

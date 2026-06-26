@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -7,6 +8,7 @@ namespace SistemaInventario.Data.Entities
 {
     public class LicenciasSoftware
     {
+        [Key]
         [Column("licencia_id")]
         public int LicenciaId { get; set; }
 
@@ -25,7 +27,7 @@ namespace SistemaInventario.Data.Entities
         [Column("equipo_id")]
         public int EquipoId { get; set; }
 
-        [ForeignKey("equipo_id")]
+        [ForeignKey("EquipoId")]
         public Equipos? Equipo { get; set; }
     }
 }

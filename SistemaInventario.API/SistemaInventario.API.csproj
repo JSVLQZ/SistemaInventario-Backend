@@ -15,8 +15,4 @@
     <ProjectReference Include="..\SistemaInventario.Data\SistemaInventario.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>

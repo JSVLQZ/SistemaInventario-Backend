@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -7,6 +8,7 @@ namespace SistemaInventario.Data.Entities
 {
     public class Tickets
     {
+        [Key]
         [Column("ticket_id")]
         public int TicketId { get; set; }
 
@@ -31,13 +33,13 @@ namespace SistemaInventario.Data.Entities
         [Column("fecha_creacion")]
         public DateTime FechaCreacion { get; set; }
 
-        [ForeignKey("user_id")]
+        [ForeignKey("UserId")]
         public Usuario Usuario { get; set; }
 
-        [ForeignKey("equipo_id")]
+        [ForeignKey("EquipoId")]
         public Equipos? Equipo { get; set; }
 
-        [ForeignKey("categoria_id")]
+        [ForeignKey("CategoriaId")]
         public CategoriaTicket Categoria { get; set; }
     }
 }

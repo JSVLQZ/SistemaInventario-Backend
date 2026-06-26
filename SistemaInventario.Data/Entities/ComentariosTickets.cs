@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -7,6 +8,7 @@ namespace SistemaInventario.Data.Entities
 {
     public class ComentariosTickets
     {
+        [Key]
         [Column("comentario_id")]
         public int ComentarioId { get; set; }
 
@@ -22,10 +24,10 @@ namespace SistemaInventario.Data.Entities
         [Column("fecha_comentario")]
         public DateOnly FechaComentario { get; set; }
 
-        [ForeignKey("ticket_id")]
+        [ForeignKey("TicketId")]
         public Tickets? Ticket { get; set; }
 
-        [ForeignKey("user_id")]
+        [ForeignKey("UserId")]
         public Usuario? Usuario { get; set; }
     }
 }

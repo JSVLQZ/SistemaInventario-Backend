@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -7,6 +8,7 @@ namespace SistemaInventario.Data.Entities
 {
     public class Equipos
     {
+        [Key]
         [Column("equipo_id")]
         public int EquipoId { get; set; }
 
@@ -37,10 +39,10 @@ namespace SistemaInventario.Data.Entities
         [Column("proveedor_id")]
         public int ProveedorId { get; set; }
 
-        [ForeignKey("renting_id")]
+        [ForeignKey("RentingId")]
         public Renting? Renting { get; set; }
 
-        [ForeignKey("proveedor_id")]
-        public Proveedores Proveedor { get; set; }
+        [ForeignKey("ProveedorId")]
+        public Proveedores? Proveedor { get; set; }
     }
 }
