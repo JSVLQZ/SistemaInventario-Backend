@@ -4,8 +4,8 @@ namespace SistemaInventario.API.DTOs.Create
 {
     public class ProveedorCreateDto
     {
-        [Required(ErrorMessage = "El nombre es obligatorio")]
-        public string Nombre { get; set; } = string.Empty;
+        [Required(ErrorMessage = "El nombre de la empresa es obligatorio")]
+        public string NombreEmpresa { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El NIT es obligatorio")]
         public string Nit { get; set; } = string.Empty;
