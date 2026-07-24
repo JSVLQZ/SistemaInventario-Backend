@@ -6,6 +6,7 @@ using System.Text;
 
 namespace SistemaInventario.Data.Entities
 {
+    [Table("asignacion_equipos")]
     public class AsignacionEquipos
     {
         [Key]

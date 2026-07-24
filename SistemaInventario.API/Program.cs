@@ -4,17 +4,18 @@ using SistemaInventario.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 // 1. Capturar la cadena de conexión del appsettings
 var connectionString = builder.Configuration.GetConnectionString("DbInventario");
 
-// 2. Registrar el DbContext en el contenedor de dependencias
+// 2. Registrar el DbContext con versión manual de MariaDB
 builder.Services.AddDbContext<InventarioDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
-        b => b.MigrationsAssembly("SistemaInventario.API"))); // <--- ¡Clave para las migraciones!
+    options.UseMySql(
+        connectionString,
+        new MariaDbServerVersion(new Version(10, 4, 32)), // <--- Al pasarle la versión fija, no usa AutoDetect y NO se totea
+        b => b.MigrationsAssembly("SistemaInventario.API")));
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
@@ -27,7 +28,6 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<InventarioDbContext>();
 
-        // Papi, esto revisa si la BD no existe, la crea y le monta las tablas de una
         context.Database.EnsureCreated();
 
         Console.WriteLine("==================================================");
@@ -43,7 +43,6 @@ using (var scope = app.Services.CreateScope())
 }
 // ---------------------------------------
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

@@ -6,6 +6,7 @@ using System.Text;
 
 namespace SistemaInventario.Data.Entities
 {
+    [Table("licencias_software")]
     public class LicenciasSoftware
     {
         [Key]
