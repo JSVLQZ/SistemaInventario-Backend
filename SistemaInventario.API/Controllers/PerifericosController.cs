@@ -21,22 +21,27 @@ namespace SistemaInventario.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var perifericos = await _context.Perifericos.ToListAsync();
-            return Ok(perifericos);
+            var periferico = await _context.Perifericos.ToListAsync();
+            return Ok(periferico);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var perifericos = await _context.Perifericos.FindAsync(id);
-            if (perifericos == null) return NotFound($"Periférico con ID {id} no existe");
-            return Ok(perifericos);
+            var periferico = await _context.Perifericos.FindAsync(id);
+            if (periferico == null) return NotFound($"Periférico con ID {id} no existe");
+            return Ok(periferico);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] PerifericosCreateDto dto)
         {
-            var perifericos = new Perifericos
+            if(dto.UsuarioId.HasValue)
+            {
+                var usuarioExiste = await _context.Usuario.AnyAsync(u => u.UserId == dto.UsuarioId);
+                if (!usuarioExiste) return NotFound($"Usuario con ID {dto.UsuarioId} no existe");
+            }
+            var periferico = new Perifericos
             {
                 SerialPeriferico = dto.SerialPeriferico,
                 Marca = dto.Marca,
@@ -44,45 +49,38 @@ namespace SistemaInventario.API.Controllers
                 TipoPeriferico = dto.TipoPeriferico,
                 UserId = dto.UsuarioId
             };
-            _context.Perifericos.Add(perifericos);
+            _context.Perifericos.Add(periferico);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetById), new { id = perifericos.PerifericoId }, perifericos);
+            return CreatedAtAction(nameof(GetById), new { id = periferico.PerifericoId }, periferico);
         }
 
         [HttpPatch("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] PerifericosUpdateDto dto)
         {
-            var perifericos = await _context.Perifericos.FindAsync(id);
-            if (perifericos == null) return NotFound($"Periférico con ID {id} no existe");
+            var periferico = await _context.Perifericos.FindAsync(id);
+            if (periferico == null) return NotFound($"Periférico con ID {id} no existe");
             bool seModificoAlgo = false;
-            if (!string.IsNullOrWhiteSpace(dto.Marca))
+            if (dto.UserId.HasValue && periferico.UserId != dto.UserId.Value)
             {
-                perifericos.Marca = dto.Marca;
-                seModificoAlgo = true;
-            }
-            if(!string.IsNullOrWhiteSpace(dto.Modelo))
-            {
-                perifericos.Modelo = dto.Modelo;
-                seModificoAlgo = true;
-            }
-            if(!string.IsNullOrWhiteSpace(dto.TipoPeriferico))
-            {
-                perifericos.TipoPeriferico = dto.TipoPeriferico;
+                var usuarioExiste = await _context.Usuario.AnyAsync(u => u.UserId == dto.UserId);
+                if (!usuarioExiste)
+                    return NotFound($"Usuario con ID {dto.UserId} no existe");
+                periferico.UserId = dto.UserId.Value;
                 seModificoAlgo = true;
             }
             if (seModificoAlgo)
             {
                 await _context.SaveChangesAsync();
             }
-            return Ok(perifericos);
+            return Ok(periferico);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var perifericos = await _context.Perifericos.FindAsync(id);
-            if (perifericos == null) return NotFound($"Periférico con ID {id} no existe");
-            _context.Perifericos.Remove(perifericos);
+            var periferico = await _context.Perifericos.FindAsync(id);
+            if (periferico == null) return NotFound($"Periférico con ID {id} no existe");
+            _context.Perifericos.Remove(periferico);
             await _context.SaveChangesAsync();
             return NoContent();
         }

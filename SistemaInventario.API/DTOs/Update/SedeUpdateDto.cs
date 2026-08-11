@@ -1,9 +1,13 @@
-﻿namespace SistemaInventario.API.DTOs.Update
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SistemaInventario.API.DTOs.Update
 {
     public class SedeUpdateDto
     {
+        [StringLength(45)]
         public string? NombreSede { get; set; }
-        public string? Piso { get; set; } 
-        public string? Ciudad { get; set; }
+
+        [StringLength(45)]
+        public string? Piso { get; set; }
     }
 }

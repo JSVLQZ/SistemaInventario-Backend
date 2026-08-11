@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SistemaInventario.Data.Entities;
 
 namespace SistemaInventario.Data
@@ -66,6 +62,22 @@ namespace SistemaInventario.Data
             modelBuilder.Entity<Usuario>()
                 .HasIndex(u => u.Correo)
                 .IsUnique();
+
+            modelBuilder.Entity<Proveedores>()
+                .HasIndex(p => p.CorreoSoporte)
+                .IsUnique();
+
+            modelBuilder.Entity<HistoricoAsignaciones>()
+                .HasOne(h => h.Equipo)
+                .WithMany()
+                .HasForeignKey(h => h.EquipoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<HistoricoAsignaciones>()
+                .HasOne(h => h.Usuario)
+                .WithMany()
+                .HasForeignKey(h => h.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

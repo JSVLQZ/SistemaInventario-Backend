@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -22,9 +20,9 @@ namespace SistemaInventario.Data.Entities
         public string Cargo { get; set; } = string.Empty;
 
         [Column("ubicacion_id")]
-        public int UbicacionId { get; set; }
+        public int? UbicacionId { get; set; }
 
         [ForeignKey("UbicacionId")]
-        public Sedes Ubicacion { get; set; }
+        public Sedes? Ubicacion { get; set; }
     }
 }

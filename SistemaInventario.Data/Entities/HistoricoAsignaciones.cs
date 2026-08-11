@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace SistemaInventario.Data.Entities
 {
+    [Table("historico_asignaciones")]
     public class HistoricoAsignaciones
     {
         [Key]
@@ -21,10 +20,13 @@ namespace SistemaInventario.Data.Entities
         [Column("fecha_entrega")]
         public DateTime FechaEntrega { get; set; }
 
-        [Column("fecha_devolucion")]
-        public DateTime FechaDevolucion { get; set; }
-
         [Column("fecha_recibido")]
-        public DateTime FechaRecibido { get; set; }
+        public DateTime? FechaRecibido { get; set; }
+
+        [ForeignKey("EquipoId")]
+        public Equipos? Equipo { get; set; }
+
+        [ForeignKey("UserId")]
+        public Usuario? Usuario { get; set; }
     }
 }

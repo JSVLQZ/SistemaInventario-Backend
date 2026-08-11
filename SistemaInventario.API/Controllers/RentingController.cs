@@ -44,7 +44,7 @@ namespace SistemaInventario.API.Controllers
 
             var renting = new Renting
             {
-                EmpresaRenting = dto.EmpresaRenting.Trim(),
+                EmpresaRenting = dto.EmpresaRenting,
                 FechaInicio = dto.FechaInicio,
                 FechaFin = dto.FechaFin,
                 PagoMensual = dto.PagoMensual
@@ -61,15 +61,32 @@ namespace SistemaInventario.API.Controllers
             var renting = await _context.Renting.FindAsync(id);
             if(renting == null) return NotFound($"El renting con ID {id} no existe");
             bool seModificoAlgo = false;
-            if(!string.IsNullOrWhiteSpace(dto.EmpresaRenting))
+            var nuevaFechaInicio = dto.FechaInicio ?? renting.FechaInicio;
+            var nuevaFechaFin = dto.FechaFin ?? renting.FechaFin;
+            if(nuevaFechaFin <= nuevaFechaInicio)
             {
-                renting.EmpresaRenting = dto.EmpresaRenting.Trim();
+                return BadRequest("La fecha de finalización no puede ser anterior a la fecha de inicio");
+            }
+            if (dto.FechaInicio.HasValue)
+            {
+                renting.FechaInicio = dto.FechaInicio.Value;
                 seModificoAlgo = true;
             }
-            if(seModificoAlgo)
+            if (dto.FechaFin.HasValue)
             {
-                await _context.SaveChangesAsync();
+                renting.FechaFin = dto.FechaFin.Value;
+                seModificoAlgo = true;
             }
+            if (dto.PagoMensual.HasValue)
+            {
+                renting.PagoMensual = dto.PagoMensual.Value;
+                seModificoAlgo = true;
+            }
+            if (!seModificoAlgo)
+            {
+                return BadRequest("No se proporcionaron datos para actualizar");
+            }
+            await _context.SaveChangesAsync();
             return Ok(renting);
         }
 

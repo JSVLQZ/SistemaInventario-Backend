@@ -6,6 +6,7 @@ using System.Text;
 
 namespace SistemaInventario.Data.Entities
 {
+    [Table("comentarios_tickets")]
     public class ComentariosTickets
     {
         [Key]

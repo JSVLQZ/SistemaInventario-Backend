@@ -1,8 +1,10 @@
-﻿namespace SistemaInventario.API.DTOs.Helpdesk.Update
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SistemaInventario.API.DTOs.Helpdesk.Update
 {
     public class ComentariosTicketsUpdateDto
     {
-        public int? UserId { get; set; }
+        [StringLength(1000)]
         public string? Mensaje { get; set; }
     }
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace SistemaInventario.Data.Entities
 {
@@ -19,7 +16,7 @@ namespace SistemaInventario.Data.Entities
         public string TipoComponente { get; set; } = string.Empty;
 
         [Column("detalles")]
-        public string? Detalles { get; set; }
+        public string Detalles { get; set; } = string.Empty;
 
         [Column("serial_componente")]
         public string SerialComponente { get; set; } = string.Empty;

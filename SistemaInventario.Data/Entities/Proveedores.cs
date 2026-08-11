@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
@@ -19,7 +17,7 @@ namespace SistemaInventario.Data.Entities
         public string Nit { get; set; } = string.Empty;
 
         [Column("contacto_soporte")]
-        public string ContactoSoporte { get; set; } = string.Empty;
+        public string CorreoSoporte { get; set; } = string.Empty;
 
         [Column("telefono")]
         public string? Telefono { get; set; } 

@@ -5,11 +5,14 @@ namespace SistemaInventario.API.DTOs.Create
     public class ComponentesCreateDto
     {
         public int? EquipoId { get; set; }
-
-        [Required(ErrorMessage = "El tipo de componente debe ser especificado")]
+        [Required]
+        [StringLength(50)]
         public string TipoComponente { get; set; } = string.Empty;
-        public string? Detalles { get; set; }
-        [Required(ErrorMessage = "El serial del componente debe ser especificado")]
-        public string SerialComponente { get; set; } = null!;
+        [Required]
+        [StringLength(255)]
+        public string Detalles { get; set; } = string.Empty;
+        [Required]
+        [StringLength(100)]
+        public string SerialComponente { get; set; } = string.Empty;
     }
 }

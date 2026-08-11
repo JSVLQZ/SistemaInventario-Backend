@@ -1,10 +1,13 @@
-﻿namespace SistemaInventario.API.DTOs.Update
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SistemaInventario.API.DTOs.Update
 {
     public class RentingUpdateDto
     {
-        public string? EmpresaRenting { get; set; }
-        public DateTime? FechaInicio { get; set; }
-        public DateTime? FechaFin { get; set; }
+        public DateOnly? FechaInicio { get; set; }
+        public DateOnly? FechaFin { get; set; }
+
+        [Range(0.1, double.MaxValue)]
         public Decimal? PagoMensual { get; set; }
     }
 }

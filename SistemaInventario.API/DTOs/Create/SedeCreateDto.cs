@@ -4,13 +4,15 @@ namespace SistemaInventario.API.DTOs.Create
 {
     public class SedeCreateDto
     {
-        [Required(ErrorMessage = "El nombre de la sede es requerido")]
+        [Required]
+        [StringLength(45)]
         public string NombreSede { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "El piso es requerido")]
-        public string Piso { get; set; } = string.Empty;
+        [StringLength(45)]
+        public string? Piso { get; set; }
 
-        [Required(ErrorMessage = "La ciudad es requerida")]
+        [Required]
+        [StringLength(45)]
         public string Ciudad { get; set; } = string.Empty;
     }
 }

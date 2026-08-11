@@ -22,16 +22,16 @@ namespace SistemaInventario.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var sedes = await _context.Sedes.ToListAsync();
-            return Ok(sedes);
+            var sede = await _context.Sedes.ToListAsync();
+            return Ok(sede);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var sedes = await _context.Sedes.FindAsync(id);
-            if (sedes == null) return NotFound($"La sede con el id {id} no existe");
-            return Ok(sedes);
+            var sede = await _context.Sedes.FindAsync(id);
+            if (sede == null) return NotFound($"La sede con el id {id} no existe");
+            return Ok(sede);
         }
 
         [HttpPost]
@@ -51,38 +51,33 @@ namespace SistemaInventario.API.Controllers
         [HttpPatch("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] SedeUpdateDto dto)
         {
-            var sedes = await _context.Sedes.FirstOrDefaultAsync(s => s.UbicacionId == id);
-            if (sedes == null) return NotFound($"La sede con id {id} no existe");
+            var sede = await _context.Sedes.FindAsync(id);
+            if (sede == null) return NotFound($"La sede con id {id} no existe");
             bool seModificoAlgo = false;
-            if(!string .IsNullOrWhiteSpace(dto.NombreSede))
+            if (!string.IsNullOrWhiteSpace(dto.NombreSede))
             {
-                sedes.NombreSede = dto.NombreSede.Trim();
+                sede.NombreSede = dto.NombreSede.Trim();
                 seModificoAlgo = true;
             }
-            if(!string .IsNullOrWhiteSpace(dto.Piso))
+            if (!string.IsNullOrWhiteSpace(dto.Piso))
             {
-                sedes.Piso = dto.Piso.Trim();
+                sede.Piso = dto.Piso.Trim();
                 seModificoAlgo = true;
             }
-            if(!string .IsNullOrWhiteSpace(dto.Ciudad))
+            if (!seModificoAlgo)
             {
-                sedes.Ciudad = dto.Ciudad.Trim();
-                seModificoAlgo = true;
+                return BadRequest("No se modificó ningún campo");
             }
-            if(seModificoAlgo)
-            {
-                await _context.SaveChangesAsync();
-                return Ok(sedes);
-            }
-            return BadRequest("No se modificó ningún campo");
+            await _context.SaveChangesAsync();
+            return Ok(sede);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var sedes = await _context.Sedes.FindAsync(id);
-            if (sedes == null) return NotFound($"La sede con id {id} no existe");
-            _context.Sedes.Remove(sedes);
+            var sede = await _context.Sedes.FindAsync(id);
+            if (sede == null) return NotFound($"La sede con id {id} no existe");
+            _context.Sedes.Remove(sede);
             await _context.SaveChangesAsync();
             return NoContent();
         }

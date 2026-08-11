@@ -22,10 +22,10 @@ namespace SistemaInventario.Data.Entities
         public int CategoriaId { get; set; }
 
         [Column("titulo")]
-        public string CategoriaName { get; set; } = string.Empty;
+        public string? Titulo { get; set; }
 
         [Column("descripcion")]
-        public string Descripcion { get; set; } = string.Empty;
+        public string? Descripcion { get; set; } = null;
 
         [Column("estado")]
         public string Estado { get; set; } = string.Empty;
@@ -34,12 +34,12 @@ namespace SistemaInventario.Data.Entities
         public DateTime FechaCreacion { get; set; }
 
         [ForeignKey("UserId")]
-        public Usuario Usuario { get; set; }
+        public Usuario? Usuario { get; set; }
 
         [ForeignKey("EquipoId")]
         public Equipos? Equipo { get; set; }
 
         [ForeignKey("CategoriaId")]
-        public CategoriaTicket Categoria { get; set; }
+        public CategoriaTicket? Categoria { get; set; }
     }
 }

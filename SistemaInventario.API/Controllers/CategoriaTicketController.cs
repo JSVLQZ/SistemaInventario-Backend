@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SistemaInventario.API.DTOs.Create;
 using SistemaInventario.API.DTOs.Helpdesk.Create;
 using SistemaInventario.API.DTOs.Helpdesk.Update;
-using SistemaInventario.API.DTOs.Update;
 using SistemaInventario.Data;
 using SistemaInventario.Data.Entities;
 

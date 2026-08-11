@@ -20,13 +20,13 @@ namespace SistemaInventario.Data.Entities
         public string ClaveActivacion { get; set; } = string.Empty;
 
         [Column("fecha_expiracion")]
-        public DateOnly FechaExpiracion { get; set; }
+        public DateOnly? FechaExpiracion { get; set; }
 
         [Column("tipo_licencia")]
         public string TipoLicencia { get; set; } = string.Empty;
 
         [Column("equipo_id")]
-        public int EquipoId { get; set; }
+        public int? EquipoId { get; set; }
 
         [ForeignKey("EquipoId")]
         public Equipos? Equipo { get; set; }

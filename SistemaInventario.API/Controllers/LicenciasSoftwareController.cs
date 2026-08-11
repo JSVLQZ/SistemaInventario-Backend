@@ -21,66 +21,81 @@ namespace SistemaInventario.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var licencias = await _context.LicenciasSoftware.ToListAsync();
-            return Ok(licencias);
+            var licencia = await _context.LicenciasSoftware.ToListAsync();
+            return Ok(licencia);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var licencias = await _context.LicenciasSoftware.FindAsync(id);
-            if (licencias == null) return NotFound($"Licencia de software con ID {id} no existe");
-            return Ok(licencias);
+            var licencia = await _context.LicenciasSoftware.FindAsync(id);
+            if (licencia == null) return NotFound($"Licencia de software con ID {id} no existe");
+            return Ok(licencia);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] LicenciasSoftwareCreateDto dto)
         {
-            var equipoExiste = await _context.Equipos.AnyAsync(e => e.EquipoId == dto.EquipoId!.Value);
-            if(!equipoExiste) return NotFound($"Equipo con ID {dto.EquipoId} no existe");
-
-            var licencias = new LicenciasSoftware
+            if (dto.EquipoId.HasValue)
+            {
+                var equipoExiste = await _context.Equipos.AnyAsync(e => e.EquipoId == dto.EquipoId);
+                if(!equipoExiste) return NotFound($"Equipo con ID {dto.EquipoId} no existe");
+            }
+            var licencia = new LicenciasSoftware
             {
                 NombreLicencia = dto.NombreLicencia,
                 ClaveActivacion = dto.ClaveActivacion,
-                FechaExpiracion = dto.FechaExpiracion!.Value,
+                FechaExpiracion = dto.FechaExpiracion,
                 TipoLicencia = dto.TipoLicencia,
-                EquipoId = dto.EquipoId!.Value
+                EquipoId = dto.EquipoId
             };
-            _context.LicenciasSoftware.Add(licencias);
+            _context.LicenciasSoftware.Add(licencia);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetById), new { id = licencias.LicenciaId }, licencias);
+            return CreatedAtAction(nameof(GetById), new { id = licencia.LicenciaId }, licencia);
         }
 
         [HttpPatch("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] LicenciasSoftwareUpdateDto dto)
         {
-            var licencias = await _context.LicenciasSoftware.FindAsync(id);
-            if(licencias == null) return NotFound($"Licencia de software con ID {id} no existe");
+            var licencia = await _context.LicenciasSoftware.FindAsync(id);
+            if(licencia == null) return NotFound($"Licencia de software con ID {id} no existe");
             bool seModificoAlgo = false;
             if(!string.IsNullOrWhiteSpace(dto.NombreLicencia))
             {
-                licencias.NombreLicencia = dto.NombreLicencia;
+                licencia.NombreLicencia = dto.NombreLicencia;
                 seModificoAlgo = true;
             }
-            if(!string.IsNullOrWhiteSpace(dto.TipoLicencia))
+            if(dto.FechaExpiracion.HasValue)
             {
-                licencias.TipoLicencia = dto.TipoLicencia;
+                licencia.FechaExpiracion = dto.FechaExpiracion.Value;
+                seModificoAlgo = true;
+            }
+            if (!string.IsNullOrWhiteSpace(dto.TipoLicencia))
+            {
+                licencia.TipoLicencia = dto.TipoLicencia;
+                seModificoAlgo = true;
+            }
+            if (dto.EquipoId.HasValue && dto.EquipoId != licencia.EquipoId)
+            {
+                var equipoExiste = await _context.Equipos.AnyAsync(e => e.EquipoId == dto.EquipoId);
+                if (!equipoExiste)
+                    return NotFound($"Equipo con ID {dto.EquipoId} no existe");
+                licencia.EquipoId = dto.EquipoId;
                 seModificoAlgo = true;
             }
             if(seModificoAlgo)
             {
                 await _context.SaveChangesAsync();
             }
-            return Ok(licencias);
+            return Ok(licencia);
 
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var licencias = await _context.LicenciasSoftware.FindAsync(id);
-            if (licencias == null) return NotFound($"Licencia de software con ID {id} no existe");
-            _context.LicenciasSoftware.Remove(licencias);
+            var licencia = await _context.LicenciasSoftware.FindAsync(id);
+            if (licencia == null) return NotFound($"Licencia de software con ID {id} no existe");
+            _context.LicenciasSoftware.Remove(licencia);
             await _context.SaveChangesAsync();
             return NoContent();
         }

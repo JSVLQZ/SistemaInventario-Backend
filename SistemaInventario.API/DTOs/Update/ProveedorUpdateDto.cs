@@ -1,10 +1,14 @@
-﻿namespace SistemaInventario.API.DTOs.Update
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SistemaInventario.API.DTOs.Update
 {
     public class ProveedorUpdateDto
     {
-        public string? NombreEmpresa { get; set; }
-        public string? Nit { get; set; }
+        [StringLength(100)]
+        [EmailAddress]
+        public string? CorreoSoporte { get; set; }
+
+        [StringLength(50)]
         public string? Telefono { get; set; }
-        public string? ContactoSoporte { get; set; }
     }
 }

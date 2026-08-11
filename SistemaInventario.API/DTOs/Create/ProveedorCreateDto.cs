@@ -4,16 +4,19 @@ namespace SistemaInventario.API.DTOs.Create
 {
     public class ProveedorCreateDto
     {
-        [Required(ErrorMessage = "El nombre de la empresa es obligatorio")]
+        [Required]
+        [StringLength(150)]
         public string NombreEmpresa { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "El NIT es obligatorio")]
+        [Required]
+        [StringLength(50)]
         public string Nit { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "El contacto de soporte es obligatorio")]
-        public string ContactoSoporte { get; set; } = string.Empty;
+        [Required]
+        [StringLength(100)]
+        public string CorreoSoporte { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "El teléfono no es válido")]
+        [StringLength(50)]
         public string? Telefono { get; set; }
     }
 }

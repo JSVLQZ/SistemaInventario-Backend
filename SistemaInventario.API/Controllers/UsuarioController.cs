@@ -20,26 +20,30 @@ namespace SistemaInventario.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var usuarios = await _context.Usuario.ToListAsync();
-            return Ok(usuarios);
+            var usuario = await _context.Usuario.ToListAsync();
+            return Ok(usuario);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var usuarios = await _context.Usuario.FindAsync(id);
-            if(usuarios == null) return NotFound($"El usuario {id} no existe");
-            return Ok(usuarios);
+            var usuario = await _context.Usuario.FindAsync(id);
+            if(usuario == null) return NotFound($"El usuario {id} no existe");
+            return Ok(usuario);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] UsuarioCreateDto dto)
         {
+            var sedeExiste = await _context.Sedes.AnyAsync(s => s.UbicacionId == dto.UbicacionId);
+            if (!sedeExiste)
+                return BadRequest($"La sede con ID {dto.UbicacionId} no existe.");
+
             var usuario = new Usuario
             {
-                Nombre = dto.Nombre.Trim(),
-                Correo = dto.Correo.Trim().ToLower(),
-                Cargo = dto.Cargo.Trim(),
+                Nombre = dto.Nombre,
+                Correo = dto.Correo,
+                Cargo = dto.Cargo,
                 UbicacionId = dto.UbicacionId
             };
             _context.Usuario.Add(usuario);
@@ -50,33 +54,43 @@ namespace SistemaInventario.API.Controllers
         [HttpPatch("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] UsuarioUpdateDto dto)
         {
-            var usuarios = await _context.Usuario.FindAsync(id);
-            if (usuarios == null) return NotFound($"El usuario {id} no existe");
+            var usuario = await _context.Usuario.FindAsync(id);
+            if (usuario == null) return NotFound($"El usuario {id} no existe");
             bool seModificoAlgo = false;
             if(!string.IsNullOrWhiteSpace(dto.Nombre))
             {
-                usuarios.Nombre = dto.Nombre.Trim();
+                usuario.Nombre = dto.Nombre.Trim();
                 seModificoAlgo = true;
             }
             if(!string.IsNullOrWhiteSpace(dto.Cargo))
             {
-                usuarios.Cargo = dto.Cargo.Trim();
+                usuario.Cargo = dto.Cargo.Trim();
                 seModificoAlgo = true;
             }
-            if (!seModificoAlgo) return BadRequest("No se proporcionaron datos para actualizar");
+            if(dto.UbicacionId.HasValue && dto.UbicacionId.Value != usuario.UbicacionId)
+            {
+                var sedeExiste = await _context.Sedes.AnyAsync(s => s.UbicacionId == dto.UbicacionId.Value);
+                if (!sedeExiste)
+                    return NotFound($"La sede con ID {dto.UbicacionId.Value} no existe.");
+
+                usuario.UbicacionId = dto.UbicacionId.Value;
+                seModificoAlgo = true;
+            }
+            if (!seModificoAlgo) 
+                return BadRequest("No se proporcionaron datos para actualizar");
+
             await _context.SaveChangesAsync();
-            return NoContent();
+            return Ok(usuario);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var usuarios = await _context.Usuario.FindAsync(id);
-            if (usuarios == null) return NotFound($"El usuario {id} no existe");
-            _context.Usuario.Remove(usuarios);
+            var usuario = await _context.Usuario.FindAsync(id);
+            if (usuario == null) return NotFound($"El usuario {id} no existe");
+            _context.Usuario.Remove(usuario);
             await _context.SaveChangesAsync();
             return NoContent();
         }
-
     }
 }

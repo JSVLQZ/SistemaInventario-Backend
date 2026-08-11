@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.JSInterop.Infrastructure;
 using SistemaInventario.API.DTOs.Create;
 using SistemaInventario.API.DTOs.Update;
 using SistemaInventario.Data;
@@ -23,8 +21,8 @@ namespace SistemaInventario.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var proveedores = await _context.Proveedores.ToListAsync();
-            return Ok(proveedores);
+            var proveedor = await _context.Proveedores.ToListAsync();
+            return Ok(proveedor);
         }
 
         [HttpGet("{id}")]
@@ -42,27 +40,12 @@ namespace SistemaInventario.API.Controllers
             {
                 NombreEmpresa = dto.NombreEmpresa,
                 Nit = dto.Nit,
-                ContactoSoporte = dto.ContactoSoporte,
+                CorreoSoporte = dto.CorreoSoporte,
                 Telefono = dto.Telefono
             };
             _context.Proveedores.Add(proveedor);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = proveedor.ProveedorId }, proveedor);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] ProveedorUpdateDto dto)
-        {
-            var proveedor = await _context.Proveedores.FindAsync(id);
-            if(proveedor == null) return NotFound($"El proveedor con ID {id} no existe");
-
-            proveedor.NombreEmpresa = dto.NombreEmpresa ?? string.Empty;
-            proveedor.Nit = dto.Nit ?? string.Empty;
-            proveedor.ContactoSoporte = dto.ContactoSoporte ?? string.Empty;
-            proveedor.Telefono = dto.Telefono ?? string.Empty;
-
-            await _context.SaveChangesAsync();
-            return NoContent();
         }
 
         [HttpPatch("{id}")]
@@ -71,19 +54,9 @@ namespace SistemaInventario.API.Controllers
             var proveedor = await _context.Proveedores.FindAsync(id);
             if(proveedor == null) return NotFound($"El proveedor con ID {id} no existe");
             bool seModificoAlgo = false;
-            if (!string.IsNullOrWhiteSpace(dto.NombreEmpresa))
+            if (!string.IsNullOrWhiteSpace(dto.CorreoSoporte))
             {
-                proveedor.NombreEmpresa = dto.NombreEmpresa.Trim();
-                seModificoAlgo = true;
-            }
-            if (!string.IsNullOrWhiteSpace(dto.Nit))
-            {
-                proveedor.Nit = dto.Nit.Trim();
-                seModificoAlgo = true;
-            }
-            if (!string.IsNullOrWhiteSpace(dto.ContactoSoporte))
-            {
-                proveedor.ContactoSoporte = dto.ContactoSoporte.Trim();
+                proveedor.CorreoSoporte = dto.CorreoSoporte.Trim();
                 seModificoAlgo = true;
             }
             if (!string.IsNullOrWhiteSpace(dto.Telefono))
@@ -93,7 +66,7 @@ namespace SistemaInventario.API.Controllers
             }
             if (!seModificoAlgo) return BadRequest("No se proporcionaron datos para actualizar");
             await _context.SaveChangesAsync();
-            return NoContent();
+            return Ok(proveedor);
         }
 
         [HttpDelete("{id}")]
